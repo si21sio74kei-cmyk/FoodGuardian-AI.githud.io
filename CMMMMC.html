@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodGuardian AI | Smart Food Waste Reduction</title>
+    <style>
+        /* 温馨食欲配色 */
+        :root {
+            --warm-orange: #FF8C42;
+            --soft-yellow: #FFD166;
+            --fresh-green: #06D6A0;
+            --cream-white: #FFF9F0;
+            --warm-brown: #8B5A2B;
+            --light-orange: #FFB347;
+        }
+        
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            line-height: 1.6; 
+            color: var(--warm-brown);
+            background: linear-gradient(135deg, #fff9f0 0%, #ffe8d6 100%);
+            min-height: 100vh;
+        }
+        
+        /* 双语文字样式 - 英文大，中文小 */
+        .english-text {
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+        
+        .chinese-text {
+            font-size: 0.75em;
+            color: #666;
+            margin-left: 5px;
+            font-weight: normal;
+        }
+        
+        /* 容器 */
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 0 20px; 
+        }
+        
+        /* 导航栏 - 队名在标题旁边 */
+        header {
+            background: linear-gradient(135deg, var(--warm-orange) 0%, var(--light-orange) 100%);
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(255, 140, 66, 0.2);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(139, 90, 43, 0.3);
+        }
+        
+        .team-name-header {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        /* 英雄区域 */
+        .hero {
+            text-align: center;
+            padding: 4rem 0 3rem;
+        }
+        
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            color: var(--warm-orange);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            color: var(--warm-brown);
+        }
+        
+        /* 按钮 */
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--fresh-green) 0%, #06C290 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(6, 214, 160, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(6, 214, 160, 0.4);
+        }
+        
+        /* 卡片 */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(255, 140, 66, 0.1);
+            border: 1px solid rgba(255, 140, 66, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        /* 表单元素 */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--warm-brown);
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--soft-yellow);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: white;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--fresh-green);
+            box-shadow: 0 0 0 3px rgba(6, 214, 160, 0.1);
+        }
+        
+        /* 滑动条 */
+        .slider-container {
+            margin: 2rem 0;
+        }
+        
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 10px;
+            border-radius: 5px;
+            background: linear-gradient(to right, var(--soft-yellow), var(--warm-orange));
+            outline: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: var(--fresh-green);
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .slider-value {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--warm-orange);
+            margin-top: 0.5rem;
+        }
+        
+        /* 结果展示 */
+        .result-card {
+            background: linear-gradient(135deg, #fff9f0 0%, #fff0e0 100%);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            border-left: 5px solid var(--fresh-green);
+        }
+        
+        .ingredient-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed rgba(139, 90, 43, 0.1);
+        }
+        
+        .ingredient-name {
+            font-weight: 500;
+        }
+        
+        .ingredient-amount {
+            font-weight: bold;
+            color: var(--fresh-green);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .nav-links { display: none; }
+            .container { padding: 0 15px; }
+            .logo-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+        
+        /* 动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        /* 加载动画 */
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 140, 66, 0.2);
+            border-top: 4px solid var(--warm-orange);
+            border-radius: 50%;
+            margin: 0 auto;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* 环保影响卡片 */
+        .impact-card {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .impact-item {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+        
+        .impact-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--fresh-green);
+            margin-bottom: 0.5rem;
+        }
+        
+        .impact-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 - 队名在标题旁边 -->
+    <header>
+        <nav class="container">
+            <div class="logo-section">
+                <div class="logo">🍎 FoodGuardian AI</div>
+                <div class="team-name-header">CMMMMC</div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 英雄区域 -->
+    <section class="hero">
+        <div class="container">
+            <h1>Smart Food Waste Reduction<span class="chinese-text">智能食物浪费减少</span></h1>
+            <p>AI-powered recipe calculator that prevents waste with precise portions<span class="chinese-text">AI驱动的食谱计算器，通过精准份量防止浪费</span></p>
+            <a href="#generator" class="btn">Try Smart Generator<span class="chinese-text">试用智能生成器</span></a>
+        </div>
+    </section>
+
+    <!-- 智能生成器 -->
+    <section id="generator" class="container" style="padding: 2rem 0;">
+        <div class="card fade-in">
+            <h2 style="color: var(--warm-orange); margin-bottom: 1.5rem;">
+                <span class="english-text">Smart Recipe Generator</span>
+                <span class="chinese-text">智能食谱生成器</span>
+            </h2>
+            
+            <!-- 基本信息 -->
+            <div class="form-group">
+                <label>
+                    <span class="english-text">Number of People</span>
+                    <span class="chinese-text">用餐人数</span>
+                </label>
+                <div class="slider-container">
+                    <input type="range" min="1" max="20" value="4" class="slider" id="peopleSlider">
+                    <div class="slider-value" id="peopleValue">4 <span class="chinese-text">人</span></div>
+                </div>
+            </div>
+            
+            <!-- 用餐类型 -->
+            <div class="form-group">
+                <label>
+                    <span class="english-text">Meal Type</span>
+                    <span class="chinese-text">用餐类型</span>
+                </label>
+                <select id="mealType">
+                    <option value="homecooking">
+                        <span class="english-text">Home Cooking</span>
+                        <span class="chinese-text">家常菜</span>
+                    </option>
+                    <option value="healthy">
+                        <span class="english-text">Healthy Meal</span>
+                        <span class="chinese-text">健康餐</span>
+                    </option>
+                    <option value="vegetarian">
+                        <span class="english-text">Vegetarian</span>
+                        <span class="chinese-text">素食</span>
+                    </option>
+                </select>
+            </div>
+            
+            <!-- 主要食材 - 只保留5种 -->
+            <div class="form-group">
+                <label>
+                    <span class="english-text">Main Ingredient</span>
+                    <span class="chinese-text">主要食材</span>
+                </label>
+                <select id="ingredientSelect">
+                    <option value="tomato">
+                        <span class="english-text">Tomato</span>
+                        <span class="chinese-text">番茄</span>
+                    </option>
+                    <option value="potato">
+                        <span class="english-text">Potato</span>
+                        <span class="chinese-text">土豆</span>
+                    </option>
+                    <option value="egg">
+                        <span class="english-text">Eggs</span>
+                        <span class="chinese-text">鸡蛋</span>
+                    </option>
+                    <option value="beef">
+                        <span class="english-text">Beef</span>
+                        <span class="chinese-text">牛肉</span>
+                    </option>
+                    <option value="fish">
+                        <span class="english-text">Fish</span>
+                        <span class="chinese-text">鱼</span>
+                    </option>
+                </select>
+            </div>
+            
+            <!-- 生成按钮 -->
+            <button onclick="generateRecipe()" class="btn" style="width: 100%; margin-top: 1.5rem;">
+                <span class="english-text">Generate Smart Recipe</span>
+                <span class="chinese-text">生成智能食谱</span>
+            </button>
+            
+            <!-- 结果区域 -->
+            <div id="recipeResult" style="margin-top: 2rem;">
+                <p style="text-align: center; color: #888;">
+                    <span class="english-text">Fill in the information above and click generate</span>
+                    <span class="chinese-text">填写以上信息，点击生成获得个性化食谱</span>
+                </p>
+            </div>
+            
+            <!-- 环保影响卡片 - 放在食谱生成器内部，确保联动 -->
+            <div id="impactCard" style="margin-top: 2rem; display: none;">
+                <h3 style="color: var(--fresh-green); margin-bottom: 1.5rem;">
+                    <span class="english-text">Daily Waste Reduction</span>
+                    <span class="chinese-text">每日减少浪费</span>
+                </h3>
+                
+                <p style="margin-bottom: 1rem;">
+                    <span class="english-text">This recipe helps you reduce:</span>
+                    <span class="chinese-text">此食谱帮助您减少：</span>
+                </p>
+                
+                <div class="impact-card">
+                    <div class="impact-item">
+                        <div class="impact-value" id="dailyFood">0g</div>
+                        <div class="impact-label">
+                            <span class="english-text">Food Waste</span>
+                            <span class="chinese-text">食物浪费</span>
+                        </div>
+                    </div>
+                    
+                    <div class="impact-item">
+                        <div class="impact-value" id="dailyWater">0L</div>
+                        <div class="impact-label">
+                            <span class="english-text">Water</span>
+                            <span class="chinese-text">水资源</span>
+                        </div>
+                    </div>
+                    
+                    <div class="impact-item">
+                        <div class="impact-value" id="dailyCO2">0g</div>
+                        <div class="impact-label">
+                            <span class="english-text">CO₂ Emissions</span>
+                            <span class="chinese-text">碳排放</span>
+                        </div>
+                    </div>
+                    
+                    <div class="impact-item">
+                        <div class="impact-value" id="dailyMoney">¥0</div>
+                        <div class="impact-label">
+                            <span class="english-text">Money Saved</span>
+                            <span class="chinese-text">节约资金</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1.5rem; padding: 1rem; background: #e8f5e9; border-radius: 8px;">
+                    <p>
+                        <span class="english-text">These values are calculated based on the recipe you generated.</span>
+                        <span class="chinese-text">这些数值根据您生成的食谱计算。</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer style="background: var(--warm-brown); color: white; padding: 2rem 0; text-align: center;">
+        <div class="container">
+            <p>
+                <span class="english-text">FoodGuardian AI | BIEA 2026 STEM Competition Project</span>
+                <span class="chinese-text">FoodGuardian AI | BIEA 2026 STEM竞赛项目</span>
+            </p>
+            <p style="margin-top: 1rem; font-size: 0.9em; opacity: 0.7;">
+                <span class="english-text">Team CMMMMC | Smart Food Waste Reduction Solution</span>
+                <span class="chinese-text">CMMMMC团队 | 智能食物浪费减少方案</span>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // 更新人数显示
+        const peopleSlider = document.getElementById('peopleSlider');
+        const peopleValue = document.getElementById('peopleValue');
+        
+        peopleSlider.addEventListener('input', function() {
+            const people = this.value;
+            peopleValue.innerHTML = `${people} <span class="chinese-text">人</span>`;
+        });
+        
+        // 食材数据库 - 只保留5种食材
+        const ingredientsData = {
+            tomato: {
+                name: "Tomato",
+                chineseName: "番茄",
+                wasteFactor: 45, // 每人每餐减少的浪费克数
+                recipes: [
+                    {
+                        name: "Tomato Egg Stir-fry",
+                        chineseName: "番茄炒蛋",
+                        baseForPeople: 2,
+                        ingredients: [
+                            { name: "Tomato", chineseName: "番茄", amount: 300, unit: "g" },
+                            { name: "Eggs", chineseName: "鸡蛋", amount: 4, unit: "" },
+                            { name: "Oil", chineseName: "食用油", amount: 15, unit: "ml" },
+                            { name: "Salt", chineseName: "盐", amount: 3, unit: "g" },
+                            { name: "Sugar", chineseName: "糖", amount: 5, unit: "g" }
+                        ],
+                        steps: [
+                            "Wash and cut tomatoes into wedges",
+                            "Beat eggs in a bowl",
+                            "Heat oil, scramble eggs first, set aside",
+                            "Stir-fry tomatoes until soft",
+                            "Add eggs back, season with salt and sugar"
+                        ],
+                        chineseSteps: [
+                            "番茄洗净切块",
+                            "鸡蛋打散",
+                            "热油先炒鸡蛋，盛出备用",
+                            "炒番茄至出汁",
+                            "加入鸡蛋，加盐和糖调味"
+                        ]
+                    }
+                ]
+            },
+            potato: {
+                name: "Potato",
+                chineseName: "土豆",
+                wasteFactor: 40,
+                recipes: [
+                    {
+                        name: "Mashed Potatoes",
+                        chineseName: "土豆泥",
+                        baseForPeople: 2,
+                        ingredients: [
+                            { name: "Potatoes", chineseName: "土豆", amount: 500, unit: "g" },
+                            { name: "Butter", chineseName: "黄油", amount: 30, unit: "g" },
+                            { name: "Milk", chineseName: "牛奶", amount: 50, unit: "ml" },
+                            { name: "Salt", chineseName: "盐", amount: 5, unit: "g" }
+                        ],
+                        steps: [
+                            "Peel and cube potatoes",
+                            "Boil until tender (15-20 min)",
+                            "Drain and mash",
+                            "Add butter and milk, mix well",
+                            "Season with salt"
+                        ],
+                        chineseSteps: [
+                            "土豆去皮切块",
+                            "煮至软烂(15-20分钟)",
+                            "沥干并压成泥",
+                            "加入黄油和牛奶混合",
+                            "加盐调味"
+                        ]
+                    }
+                ]
+            },
+            egg: {
+                name: "Eggs",
+                chineseName: "鸡蛋",
+                wasteFactor: 30,
+                recipes: [
+                    {
+                        name: "Scrambled Eggs",
+                        chineseName: "炒鸡蛋",
+                        baseForPeople: 2,
+                        ingredients: [
+                            { name: "Eggs", chineseName: "鸡蛋", amount: 6, unit: "" },
+                            { name: "Butter", chineseName: "黄油", amount: 20, unit: "g" },
+                            { name: "Milk", chineseName: "牛奶", amount: 30, unit: "ml" },
+                            { name: "Salt", chineseName: "盐", amount: 3, unit: "g" }
+                        ],
+                        steps: [
+                            "Beat eggs with milk and salt",
+                            "Melt butter in pan",
+                            "Pour egg mixture, cook slowly",
+                            "Stir gently until set"
+                        ],
+                        chineseSteps: [
+                            "鸡蛋与牛奶和盐打散",
+                            "锅中融化黄油",
+                            "倒入蛋液，小火慢煎",
+                            "轻轻搅拌至凝固"
+                        ]
+                    }
+                ]
+            },
+            beef: {
+                name: "Beef",
+                chineseName: "牛肉",
+                wasteFactor: 70,
+                recipes: [
+                    {
+                        name: "Beef Stir-fry",
+                        chineseName: "炒牛肉",
+                        baseForPeople: 2,
+                        ingredients: [
+                            { name: "Beef", chineseName: "牛肉", amount: 300, unit: "g" },
+                            { name: "Bell Pepper", chineseName: "甜椒", amount: 2, unit: "" },
+                            { name: "Soy Sauce", chineseName: "酱油", amount: 20, unit: "ml" },
+                            { name: "Garlic", chineseName: "大蒜", amount: 3, unit: "cloves" }
+                        ],
+                        steps: [
+                            "Slice beef thinly, marinate with soy sauce",
+                            "Stir-fry beef until browned, set aside",
+                            "Stir-fry vegetables until tender",
+                            "Add beef back, cook together"
+                        ],
+                        chineseSteps: [
+                            "牛肉切片，用酱油腌制",
+                            "炒牛肉至变色，盛出备用",
+                            "炒蔬菜至变软",
+                            "加入牛肉一起翻炒"
+                        ]
+                    }
+                ]
+            },
+            fish: {
+                name: "Fish",
+                chineseName: "鱼",
+                wasteFactor: 65,
+                recipes: [
+                    {
+                        name: "Steamed Fish",
+                        chineseName: "清蒸鱼",
+                        baseForPeople: 2,
+                        ingredients: [
+                            { name: "Fish Fillet", chineseName: "鱼片", amount: 400, unit: "g" },
+                            { name: "Ginger", chineseName: "姜", amount: 20, unit: "g" },
+                            { name: "Scallion", chineseName: "葱", amount: 2, unit: "stalks" },
+                            { name: "Soy Sauce", chineseName: "酱油", amount: 15, unit: "ml" }
+                        ],
+                        steps: [
+                            "Place fish on plate with ginger",
+                            "Steam for 8-10 minutes",
+                            "Top with scallions",
+                            "Heat oil, pour over fish"
+                        ],
+                        chineseSteps: [
+                            "鱼放在盘中，加姜片",
+                            "蒸8-10分钟",
+                            "撒上葱花",
+                            "热油淋在鱼上"
+                        ]
+                    }
+                ]
+            }
+        };
+
+        // 更新环保影响显示
+        function updateDailyImpact(people, ingredient) {
+            const ingredientData = ingredientsData[ingredient] || ingredientsData.tomato;
+            const wasteFactor = ingredientData.wasteFactor;
+            
+            // 计算每日浪费减少量
+            const dailyWaste = people * wasteFactor;
+            const dailyWater = dailyWaste * 5; // 1克食物浪费 ≈ 5升水
+            const dailyCO2 = dailyWaste * 0.5; // 1克食物浪费 ≈ 0.5克CO₂
+            const dailyMoney = dailyWaste * 0.02; // 1克食物 ≈ 0.02元
+            
+            // 更新显示
+            document.getElementById('dailyFood').textContent = dailyWaste + 'g';
+            document.getElementById('dailyWater').textContent = dailyWater + 'L';
+            document.getElementById('dailyCO2').textContent = dailyCO2 + 'g';
+            document.getElementById('dailyMoney').textContent = '¥' + dailyMoney.toFixed(0);
+            
+            // 显示环保影响卡片
+            document.getElementById('impactCard').style.display = 'block';
+        }
+
+        // 生成食谱
+        function generateRecipe() {
+            const people = parseInt(peopleSlider.value);
+            const ingredient = document.getElementById('ingredientSelect').value;
+            const ingredientData = ingredientsData[ingredient];
+            
+            const resultDiv = document.getElementById('recipeResult');
+            
+            // 显示加载动画
+            resultDiv.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 1rem; color: var(--warm-orange);">
+                        <span class="english-text">Generating recipe for ${people} people...</span>
+                        <span class="chinese-text">正在为${people}人生成食谱...</span>
+                    </p>
+                </div>
+            `;
+            
+            // 模拟AI处理
+            setTimeout(() => {
+                // 选择随机食谱
+                const recipe = ingredientData.recipes[0];
+                const scale = people / recipe.baseForPeople;
+                
+                // 更新环保影响
+                updateDailyImpact(people, ingredient);
+                
+                resultDiv.innerHTML = `
+                    <div>
+                        <h3>${recipe.name}<span class="chinese-text">· ${recipe.chineseName}</span></h3>
+                        <p>
+                            <span class="english-text">Perfect for ${people} ${people === 1 ? 'person' : 'people'}</span>
+                            <span class="chinese-text">· 适合${people}人</span>
+                        </p>
+                        
+                        <h4 style="margin-top: 1.5rem; color: var(--primary);">
+                            <span class="english-text">Ingredients</span>
+                            <span class="chinese-text">· 食材清单</span>
+                        </h4>
+                        <div class="result-card">
+                            ${recipe.ingredients.map(item => {
+                                const scaledAmount = Math.round(item.amount * scale);
+                                return `
+                                    <div class="ingredient-item">
+                                        <span>${item.name}<span class="chinese-text">· ${item.chineseName}</span></span>
+                                        <span style="font-weight: bold; color: var(--fresh-green);">
+                                            ${scaledAmount} ${item.unit}
+                                        </span>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                        
+                        <h4 style="margin-top: 1.5rem; color: var(--primary);">
+                            <span class="english-text">Instructions</span>
+                            <span class="chinese-text">· 制作步骤</span>
+                        </h4>
+                        <ol style="margin: 1rem 0 1rem 1.5rem;">
+                            ${recipe.steps.map((step, index) => `
+                                <li style="margin-bottom: 0.75rem;">
+                                    ${step}<br>
+                                    <span class="chinese-text" style="display: block; margin-top: 2px;">${recipe.chineseSteps[index]}</span>
+                                </li>
+                            `).join('')}
+                        </ol>
+                    </div>
+                `;
+            }, 1000);
+        }
+        
+        // 页面加载时初始化
+        window.addEventListener('load', function() {
+            // 自动生成一个示例食谱
+            setTimeout(() => {
+                if (window.location.hash === '#generator' || window.location.hash === '') {
+                    generateRecipe();
+                }
+            }, 500);
+            
+            // 当人数或食材变化时，如果有生成的食谱，更新环保影响
+            peopleSlider.addEventListener('input', function() {
+                const people = parseInt(this.value);
+                const ingredient = document.getElementById('ingredientSelect').value;
+                
+                // 只有已经生成过食谱才更新
+                if (document.getElementById('impactCard').style.display === 'block') {
+                    updateDailyImpact(people, ingredient);
+                }
+            });
+            
+            document.getElementById('ingredientSelect').addEventListener('change', function() {
+                const people = parseInt(peopleSlider.value);
+                const ingredient = this.value;
+                
+                // 只有已经生成过食谱才更新
+                if (document.getElementById('impactCard').style.display === 'block') {
+                    updateDailyImpact(people, ingredient);
+                }
+            });
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
