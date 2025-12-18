@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FoodGuardian AI | 智能防浪费食谱助手</title>
+    <title>FoodGuardian AI | Smart Food Waste Reduction</title>
     <style>
         /* 温馨食欲配色 */
         :root {
@@ -15,24 +15,41 @@
             --light-orange: #FFB347;
         }
         
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
         
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            line-height: 1.6; 
             color: var(--warm-brown);
             background: linear-gradient(135deg, #fff9f0 0%, #ffe8d6 100%);
             min-height: 100vh;
         }
         
-        /* 容器 */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+        /* 双语文字样式 - 英文大，中文小 */
+        .english-text {
+            font-size: 1.1em;
+            font-weight: 600;
         }
         
-        /* 导航栏 */
+        .chinese-text {
+            font-size: 0.75em;
+            color: #666;
+            margin-left: 5px;
+            font-weight: normal;
+        }
+        
+        /* 容器 */
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 0 20px; 
+        }
+        
+        /* 导航栏 - 队名在标题旁边 */
         header {
             background: linear-gradient(135deg, var(--warm-orange) 0%, var(--light-orange) 100%);
             padding: 1rem 0;
@@ -45,11 +62,28 @@
             align-items: center;
         }
         
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
         .logo {
             font-size: 1.8rem;
             font-weight: bold;
             color: white;
             text-shadow: 1px 1px 3px rgba(139, 90, 43, 0.3);
+        }
+        
+        .team-name-header {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
         
         /* 英雄区域 */
@@ -59,7 +93,7 @@
         }
         
         .hero h1 {
-            font-size: 3rem;
+            font-size: 2.8rem;
             margin-bottom: 1rem;
             color: var(--warm-orange);
         }
@@ -98,7 +132,7 @@
             padding: 2rem;
             box-shadow: 0 10px 30px rgba(255, 140, 66, 0.1);
             border: 1px solid rgba(255, 140, 66, 0.1);
-            margin: 2rem 0;
+            margin-bottom: 2rem;
         }
         
         /* 表单元素 */
@@ -130,6 +164,10 @@
         }
         
         /* 滑动条 */
+        .slider-container {
+            margin: 2rem 0;
+        }
+        
         .slider {
             -webkit-appearance: none;
             width: 100%;
@@ -182,24 +220,26 @@
             color: var(--fresh-green);
         }
         
-        /* 队伍名 */
-        .team-name {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--warm-orange);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-weight: bold;
-            box-shadow: 0 4px 10px rgba(255, 140, 66, 0.3);
-            z-index: 100;
-        }
-        
         /* 响应式设计 */
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.2rem; }
+            .nav-links { display: none; }
             .container { padding: 0 15px; }
+            .logo-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+        
+        /* 动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
         }
         
         /* 加载动画 */
@@ -217,221 +257,447 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        
+        /* 环保影响卡片 */
+        .impact-card {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .impact-item {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+        
+        .impact-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--fresh-green);
+            margin-bottom: 0.5rem;
+        }
+        
+        .impact-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
     </style>
 </head>
 <body>
-    <!-- 导航栏 -->
+    <!-- 导航栏 - 队名在标题旁边 -->
     <header>
         <nav class="container">
-            <div class="logo">🍎 FoodGuardian AI</div>
+            <div class="logo-section">
+                <div class="logo">🍎 FoodGuardian AI</div>
+                <div class="team-name-header">CMMMMC</div>
+            </div>
         </nav>
     </header>
 
     <!-- 英雄区域 -->
     <section class="hero">
         <div class="container">
-            <h1>你今天打算做什么美食？</h1>
-            <p>通过AI智能计算，为家人朋友准备刚好够吃的分量，美味不浪费</p>
-            <a href="#generator" class="btn">开始智能规划</a>
+            <h1>Smart Food Waste Reduction<span class="chinese-text">智能食物浪费减少</span></h1>
+            <p>AI-powered recipe calculator that prevents waste with precise portions<span class="chinese-text">AI驱动的食谱计算器，通过精准份量防止浪费</span></p>
+            <a href="#generator" class="btn">Try Smart Generator<span class="chinese-text">试用智能生成器</span></a>
         </div>
     </section>
 
     <!-- 智能生成器 -->
-    <section id="generator" class="container">
-        <div class="card">
-            <h2 style="color: var(--warm-orange); margin-bottom: 1.5rem;">🍽️ 智能食谱生成器</h2>
+    <section id="generator" class="container" style="padding: 2rem 0;">
+        <div class="card fade-in">
+            <h2 style="color: var(--warm-orange); margin-bottom: 1.5rem;">
+                <span class="english-text">Smart Recipe Generator</span>
+                <span class="chinese-text">智能食谱生成器</span>
+            </h2>
             
-            <!-- 用餐人数 -->
+            <!-- 基本信息 -->
             <div class="form-group">
-                <label>用餐人数</label>
-                <input type="range" min="1" max="20" value="4" class="slider" id="peopleSlider">
-                <div class="slider-value" id="peopleValue">4 人</div>
+                <label>
+                    <span class="english-text">Number of People</span>
+                    <span class="chinese-text">用餐人数</span>
+                </label>
+                <div class="slider-container">
+                    <input type="range" min="1" max="20" value="4" class="slider" id="peopleSlider">
+                    <div class="slider-value" id="peopleValue">4 <span class="chinese-text">人</span></div>
+                </div>
             </div>
             
             <!-- 用餐类型 -->
             <div class="form-group">
-                <label>用餐类型</label>
+                <label>
+                    <span class="english-text">Meal Type</span>
+                    <span class="chinese-text">用餐类型</span>
+                </label>
                 <select id="mealType">
-                    <option value="家常菜">家常菜</option>
-                    <option value="健康餐">健康减脂餐</option>
-                    <option value="素食">素食</option>
-                    <option value="宴客菜">宴客菜</option>
+                    <option value="homecooking">
+                        <span class="english-text">Home Cooking</span>
+                        <span class="chinese-text">家常菜</span>
+                    </option>
+                    <option value="healthy">
+                        <span class="english-text">Healthy Meal</span>
+                        <span class="chinese-text">健康餐</span>
+                    </option>
+                    <option value="vegetarian">
+                        <span class="english-text">Vegetarian</span>
+                        <span class="chinese-text">素食</span>
+                    </option>
+                    <option value="feast">
+                        <span class="english-text">Feast Dish</span>
+                        <span class="chinese-text">宴客菜</span>
+                    </option>
                 </select>
             </div>
             
             <!-- 主要食材 -->
             <div class="form-group">
-                <label>主要食材</label>
+                <label>
+                    <span class="english-text">Main Ingredient</span>
+                    <span class="chinese-text">主要食材</span>
+                </label>
                 <select id="ingredientSelect">
-                    <option value="tomato">番茄</option>
-                    <option value="chicken">鸡肉</option>
-                    <option value="potato">土豆</option>
-                    <option value="egg">鸡蛋</option>
-                    <option value="beef">牛肉</option>
-                    <option value="fish">鱼</option>
+                    <option value="tomato">
+                        <span class="english-text">Tomato</span>
+                        <span class="chinese-text">番茄</span>
+                    </option>
+                    <option value="chicken">
+                        <span class="english-text">Chicken Breast</span>
+                        <span class="chinese-text">鸡胸肉</span>
+                    </option>
+                    <option value="potato">
+                        <span class="english-text">Potato</span>
+                        <span class="chinese-text">土豆</span>
+                    </option>
+                    <option value="egg">
+                        <span class="english-text">Eggs</span>
+                        <span class="chinese-text">鸡蛋</span>
+                    </option>
+                    <option value="beef">
+                        <span class="english-text">Beef</span>
+                        <span class="chinese-text">牛肉</span>
+                    </option>
+                    <option value="fish">
+                        <span class="english-text">Fish</span>
+                        <span class="chinese-text">鱼</span>
+                    </option>
                 </select>
             </div>
             
             <!-- 生成按钮 -->
             <button onclick="generateRecipe()" class="btn" style="width: 100%; margin-top: 1.5rem;">
-                🪄 生成智能食谱
+                <span class="english-text">Generate Smart Recipe</span>
+                <span class="chinese-text">生成智能食谱</span>
             </button>
             
             <!-- 结果区域 -->
             <div id="recipeResult" style="margin-top: 2rem;">
-                <p style="text-align: center; color: #888;">填写以上信息，点击生成获得个性化食谱</p>
+                <p style="text-align: center; color: #888;">
+                    <span class="english-text">Fill in the information above and click generate</span>
+                    <span class="chinese-text">填写以上信息，点击生成获得个性化食谱</span>
+                </p>
             </div>
         </div>
     </section>
 
-    <!-- 环保影响 -->
-    <section id="impact" class="container">
-        <div class="card">
-            <h2 style="color: var(--fresh-green); margin-bottom: 1.5rem;">🌱 环保影响计算器</h2>
+    <!-- 环保影响 - 现在会动态更新 -->
+    <section id="impact" class="container" style="padding-bottom: 3rem;">
+        <div class="card fade-in">
+            <h2 style="color: var(--fresh-green); margin-bottom: 1.5rem;">
+                <span class="english-text">Environmental Impact</span>
+                <span class="chinese-text">环保影响</span>
+            </h2>
             
-            <div style="display: flex; flex-wrap: wrap; gap: 2rem;">
-                <div style="flex: 1; min-width: 300px;">
-                    <h3>您每周减少的浪费</h3>
-                    <input type="range" min="0" max="1000" value="300" class="slider" id="wasteSlider">
-                    <div class="slider-value" id="wasteValue">300 克</div>
+            <p style="margin-bottom: 1rem;">
+                <span class="english-text">Based on your recipe selection, you're reducing:</span>
+                <span class="chinese-text">根据您的食谱选择，您正在减少：</span>
+            </p>
+            
+            <div class="impact-card">
+                <div class="impact-item">
+                    <div class="impact-value" id="savedFood">200g</div>
+                    <div class="impact-label">
+                        <span class="english-text">Food Waste</span>
+                        <span class="chinese-text">食物浪费</span>
+                    </div>
                 </div>
                 
-                <div style="flex: 1; min-width: 300px;">
-                    <h3>计算结果</h3>
-                    <div class="result-card">
-                        <p>每年节省食物: <span id="savedFood">15.6</span> 公斤</p>
-                        <p>节约水资源: <span id="savedWater">7800</span> 升</p>
-                        <p>减少碳排放: <span id="savedCO2">78</span> 公斤</p>
-                        <p>节省资金: <span id="savedMoney">312</span> 元</p>
+                <div class="impact-item">
+                    <div class="impact-value" id="savedWater">1000L</div>
+                    <div class="impact-label">
+                        <span class="english-text">Water</span>
+                        <span class="chinese-text">水资源</span>
+                    </div>
+                </div>
+                
+                <div class="impact-item">
+                    <div class="impact-value" id="savedCO2">100g</div>
+                    <div class="impact-label">
+                        <span class="english-text">CO₂ Emissions</span>
+                        <span class="chinese-text">碳排放</span>
+                    </div>
+                </div>
+                
+                <div class="impact-item">
+                    <div class="impact-value" id="savedMoney">¥20</div>
+                    <div class="impact-label">
+                        <span class="english-text">Money Saved</span>
+                        <span class="chinese-text">节约资金</span>
                     </div>
                 </div>
             </div>
+            
+            <div style="margin-top: 1.5rem; padding: 1rem; background: #e8f5e9; border-radius: 8px;">
+                <p>
+                    <span class="english-text">These values are calculated in real-time based on the number of people and ingredients selected.</span>
+                    <span class="chinese-text">这些数值根据所选人数和食材实时计算。</span>
+                </p>
+            </div>
         </div>
     </section>
 
-    <!-- 队伍名 -->
-    <div class="team-name">CMMMMC</div>
+    <!-- 页脚 -->
+    <footer style="background: var(--warm-brown); color: white; padding: 2rem 0; text-align: center;">
+        <div class="container">
+            <p>
+                <span class="english-text">FoodGuardian AI | BIEA 2026 STEM Competition Project</span>
+                <span class="chinese-text">FoodGuardian AI | BIEA 2026 STEM竞赛项目</span>
+            </p>
+            <p style="margin-top: 1rem; font-size: 0.9em; opacity: 0.7;">
+                <span class="english-text">Team CMMMMC | Smart Food Waste Reduction Solution</span>
+                <span class="chinese-text">CMMMMC团队 | 智能食物浪费减少方案</span>
+            </p>
+        </div>
+    </footer>
 
     <script>
         // 更新人数显示
         const peopleSlider = document.getElementById('peopleSlider');
         const peopleValue = document.getElementById('peopleValue');
-        const wasteSlider = document.getElementById('wasteSlider');
-        const wasteValue = document.getElementById('wasteValue');
         
         peopleSlider.addEventListener('input', function() {
             const people = this.value;
-            peopleValue.textContent = `${people} 人`;
+            peopleValue.innerHTML = `${people} <span class="chinese-text">人</span>`;
         });
         
-        wasteSlider.addEventListener('input', function() {
-            const waste = this.value;
-            wasteValue.textContent = `${waste} 克`;
-            calculateImpact();
-        });
-        
-        // 食谱数据库
-        const recipes = {
-            "家常菜": [
-                {
-                    name: "番茄炒蛋",
-                    ingredients: [
-                        { name: "番茄", amount: 200, unit: "克" },
-                        { name: "鸡蛋", amount: 1, unit: "个" },
-                        { name: "食用油", amount: 10, unit: "毫升" },
-                        { name: "盐", amount: 2, unit: "克" },
-                        { name: "糖", amount: 3, unit: "克" },
-                        { name: "葱花", amount: 5, unit: "克" }
-                    ],
-                    steps: [
-                        "番茄洗净切块，鸡蛋打散备用",
-                        "热锅倒油，先炒鸡蛋至凝固，盛出备用",
-                        "锅中再加少许油，放入番茄块翻炒至出汁",
-                        "加入炒好的鸡蛋，加盐和糖调味，翻炒均匀",
-                        "撒上葱花，出锅装盘"
-                    ],
-                    tips: "番茄选熟透的口感更好，可加少许糖中和酸味"
-                }
-            ],
-            "健康餐": [
-                {
-                    name: "香煎鸡胸沙拉",
-                    ingredients: [
-                        { name: "鸡胸肉", amount: 150, unit: "克" },
-                        { name: "生菜", amount: 100, unit: "克" },
-                        { name: "小番茄", amount: 5, unit: "个" },
-                        { name: "黄瓜", amount: 0.5, unit: "根" },
-                        { name: "橄榄油", amount: 5, unit: "毫升" },
-                        { name: "柠檬汁", amount: 10, unit: "毫升" }
-                    ],
-                    steps: [
-                        "鸡胸肉用盐和黑胡椒腌制10分钟",
-                        "平底锅少油，中火煎鸡胸肉每面4-5分钟至熟透",
-                        "蔬菜洗净切好，放入大碗中",
-                        "鸡胸肉切片放在蔬菜上",
-                        "淋上橄榄油和柠檬汁混合的酱汁"
-                    ],
-                    tips: "鸡胸肉用刀背拍松更易入味，煎后静置5分钟再切"
-                }
-            ],
-            "素食": [
-                {
-                    name: "素食炒饭",
-                    ingredients: [
-                        { name: "米饭", amount: 150, unit: "克" },
-                        { name: "胡萝卜", amount: 50, unit: "克" },
-                        { name: "青豆", amount: 50, unit: "克" },
-                        { name: "玉米", amount: 50, unit: "克" },
-                        { name: "植物油", amount: 10, unit: "毫升" },
-                        { name: "酱油", amount: 5, unit: "毫升" }
-                    ],
-                    steps: [
-                        "胡萝卜切丁，与青豆、玉米一起焯水",
-                        "热锅倒油，加入所有蔬菜翻炒",
-                        "加入米饭翻炒均匀",
-                        "加入酱油调味，翻炒均匀即可"
-                    ],
-                    tips: "使用隔夜饭口感更佳"
-                }
-            ],
-            "宴客菜": [
-                {
-                    name: "红烧牛肉",
-                    ingredients: [
-                        { name: "牛肉", amount: 200, unit: "克" },
-                        { name: "土豆", amount: 100, unit: "克" },
-                        { name: "胡萝卜", amount: 50, unit: "克" },
-                        { name: "洋葱", amount: 50, unit: "克" },
-                        { name: "酱油", amount: 15, unit: "毫升" },
-                        { name: "料酒", amount: 10, unit: "毫升" }
-                    ],
-                    steps: [
-                        "牛肉切块焯水，土豆、胡萝卜切块",
-                        "热锅倒油，炒香洋葱",
-                        "加入牛肉翻炒，加入酱油、料酒",
-                        "加水没过牛肉，炖煮30分钟",
-                        "加入土豆、胡萝卜，再炖20分钟"
-                    ],
-                    tips: "炖煮时间足够，牛肉更软烂入味"
-                }
-            ]
+        // 食材数据库
+        const ingredientsData = {
+            tomato: {
+                name: "Tomato",
+                chineseName: "番茄",
+                wasteFactor: 45, // 每人减少的浪费克数
+                recipes: [
+                    {
+                        name: "Tomato Egg Stir-fry",
+                        chineseName: "番茄炒蛋",
+                        baseForPeople: 2,
+                        ingredients: [
+                            { name: "Tomato", chineseName: "番茄", amount: 300, unit: "g" },
+                            { name: "Eggs", chineseName: "鸡蛋", amount: 4, unit: "" },
+                            { name: "Oil", chineseName: "食用油", amount: 15, unit: "ml" },
+                            { name: "Salt", chineseName: "盐", amount: 3, unit: "g" },
+                            { name: "Sugar", chineseName: "糖", amount: 5, unit: "g" }
+                        ],
+                        steps: [
+                            "Wash and cut tomatoes into wedges",
+                            "Beat eggs in a bowl",
+                            "Heat oil, scramble eggs first, set aside",
+                            "Stir-fry tomatoes until soft",
+                            "Add eggs back, season with salt and sugar"
+                        ],
+                        chineseSteps: [
+                            "番茄洗净切块",
+                            "鸡蛋打散",
+                            "热油先炒鸡蛋，盛出备用",
+                            "炒番茄至出汁",
+                            "加入鸡蛋，加盐和糖调味"
+                        ]
+                    }
+                ]
+            },
+            chicken: {
+                name: "Chicken Breast",
+                chineseName: "鸡胸肉",
+                wasteFactor: 60,
+                recipes: [
+                    {
+                        name: "Grilled Chicken",
+                        chineseName: "香煎鸡胸",
+                        baseForPeople: 2,
+                        ingredients: [
+                            { name: "Chicken Breast", chineseName: "鸡胸肉", amount: 300, unit: "g" },
+                            { name: "Olive Oil", chineseName: "橄榄油", amount: 10, unit: "ml" },
+                            { name: "Salt", chineseName: "盐", amount: 5, unit: "g" },
+                            { name: "Black Pepper", chineseName: "黑胡椒", amount: 2, unit: "g" },
+                            { name: "Lemon", chineseName: "柠檬", amount: 0.5, unit: "" }
+                        ],
+                        steps: [
+                            "Season chicken with salt and pepper",
+                            "Heat oil in pan",
+                            "Cook chicken 6-7 min per side",
+                            "Rest 5 min before slicing",
+                            "Serve with lemon wedges"
+                        ],
+                        chineseSteps: [
+                            "鸡肉用盐和胡椒腌制",
+                            "锅中热油",
+                            "每面煎6-7分钟",
+                            "静置5分钟后切片",
+                            "配柠檬角食用"
+                        ]
+                    }
+                ]
+            },
+            potato: {
+                name: "Potato",
+                chineseName: "土豆",
+                wasteFactor: 40,
+                recipes: [
+                    {
+                        name: "Mashed Potatoes",
+                        chineseName: "土豆泥",
+                        baseForPeople: 2,
+                        ingredients: [
+                            { name: "Potatoes", chineseName: "土豆", amount: 500, unit: "g" },
+                            { name: "Butter", chineseName: "黄油", amount: 30, unit: "g" },
+                            { name: "Milk", chineseName: "牛奶", amount: 50, unit: "ml" },
+                            { name: "Salt", chineseName: "盐", amount: 5, unit: "g" }
+                        ],
+                        steps: [
+                            "Peel and cube potatoes",
+                            "Boil until tender (15-20 min)",
+                            "Drain and mash",
+                            "Add butter and milk, mix well",
+                            "Season with salt"
+                        ],
+                        chineseSteps: [
+                            "土豆去皮切块",
+                            "煮至软烂(15-20分钟)",
+                            "沥干并压成泥",
+                            "加入黄油和牛奶混合",
+                            "加盐调味"
+                        ]
+                    }
+                ]
+            },
+            egg: {
+                name: "Eggs",
+                chineseName: "鸡蛋",
+                wasteFactor: 30,
+                recipes: [
+                    {
+                        name: "Scrambled Eggs",
+                        chineseName: "炒鸡蛋",
+                        baseForPeople: 2,
+                        ingredients: [
+                            { name: "Eggs", chineseName: "鸡蛋", amount: 6, unit: "" },
+                            { name: "Butter", chineseName: "黄油", amount: 20, unit: "g" },
+                            { name: "Milk", chineseName: "牛奶", amount: 30, unit: "ml" },
+                            { name: "Salt", chineseName: "盐", amount: 3, unit: "g" }
+                        ],
+                        steps: [
+                            "Beat eggs with milk and salt",
+                            "Melt butter in pan",
+                            "Pour egg mixture, cook slowly",
+                            "Stir gently until set"
+                        ],
+                        chineseSteps: [
+                            "鸡蛋与牛奶和盐打散",
+                            "锅中融化黄油",
+                            "倒入蛋液，小火慢煎",
+                            "轻轻搅拌至凝固"
+                        ]
+                    }
+                ]
+            },
+            beef: {
+                name: "Beef",
+                chineseName: "牛肉",
+                wasteFactor: 70,
+                recipes: [
+                    {
+                        name: "Beef Stir-fry",
+                        chineseName: "炒牛肉",
+                        baseForPeople: 2,
+                        ingredients: [
+                            { name: "Beef", chineseName: "牛肉", amount: 300, unit: "g" },
+                            { name: "Bell Pepper", chineseName: "甜椒", amount: 2, unit: "" },
+                            { name: "Soy Sauce", chineseName: "酱油", amount: 20, unit: "ml" },
+                            { name: "Garlic", chineseName: "大蒜", amount: 3, unit: "cloves" }
+                        ],
+                        steps: [
+                            "Slice beef thinly, marinate with soy sauce",
+                            "Stir-fry beef until browned, set aside",
+                            "Stir-fry vegetables until tender",
+                            "Add beef back, cook together"
+                        ],
+                        chineseSteps: [
+                            "牛肉切片，用酱油腌制",
+                            "炒牛肉至变色，盛出备用",
+                            "炒蔬菜至变软",
+                            "加入牛肉一起翻炒"
+                        ]
+                    }
+                ]
+            },
+            fish: {
+                name: "Fish",
+                chineseName: "鱼",
+                wasteFactor: 65,
+                recipes: [
+                    {
+                        name: "Steamed Fish",
+                        chineseName: "清蒸鱼",
+                        baseForPeople: 2,
+                        ingredients: [
+                            { name: "Fish Fillet", chineseName: "鱼片", amount: 400, unit: "g" },
+                            { name: "Ginger", chineseName: "姜", amount: 20, unit: "g" },
+                            { name: "Scallion", chineseName: "葱", amount: 2, unit: "stalks" },
+                            { name: "Soy Sauce", chineseName: "酱油", amount: 15, unit: "ml" }
+                        ],
+                        steps: [
+                            "Place fish on plate with ginger",
+                            "Steam for 8-10 minutes",
+                            "Top with scallions",
+                            "Heat oil, pour over fish"
+                        ],
+                        chineseSteps: [
+                            "鱼放在盘中，加姜片",
+                            "蒸8-10分钟",
+                            "撒上葱花",
+                            "热油淋在鱼上"
+                        ]
+                    }
+                ]
+            }
         };
-        
-        // 食材对应食谱
-        const ingredientRecipes = {
-            "tomato": { type: "家常菜", index: 0 },
-            "chicken": { type: "健康餐", index: 0 },
-            "potato": { type: "宴客菜", index: 0 },
-            "egg": { type: "家常菜", index: 0 },
-            "beef": { type: "宴客菜", index: 0 },
-            "fish": { type: "健康餐", index: 0 }
-        };
-        
-        // 生成食谱函数
+
+        // 更新环保影响显示
+        function updateEnvironmentalImpact(people, ingredient) {
+            const ingredientData = ingredientsData[ingredient] || ingredientsData.tomato;
+            const wasteFactor = ingredientData.wasteFactor;
+            
+            // 计算浪费减少量
+            const wasteSaved = people * wasteFactor;
+            const waterSaved = wasteSaved * 5; // 1克食物浪费 ≈ 5升水
+            const co2Saved = wasteSaved * 0.5; // 1克食物浪费 ≈ 0.5克CO₂
+            const moneySaved = wasteSaved * 0.02; // 1克食物 ≈ 0.02元
+            
+            // 更新显示
+            document.getElementById('savedFood').textContent = wasteSaved + 'g';
+            document.getElementById('savedWater').textContent = waterSaved + 'L';
+            document.getElementById('savedCO2').textContent = co2Saved + 'g';
+            document.getElementById('savedMoney').textContent = '¥' + moneySaved.toFixed(0);
+        }
+
+        // 生成食谱
         function generateRecipe() {
             const people = parseInt(peopleSlider.value);
-            const mealType = document.getElementById('mealType').value;
             const ingredient = document.getElementById('ingredientSelect').value;
+            const ingredientData = ingredientsData[ingredient];
             
             const resultDiv = document.getElementById('recipeResult');
             
@@ -439,85 +705,69 @@
             resultDiv.innerHTML = `
                 <div style="text-align: center; padding: 2rem;">
                     <div class="spinner"></div>
-                    <p style="margin-top: 1rem; color: var(--warm-orange);">AI正在为您规划${people}人份的完美食谱...</p>
+                    <p style="margin-top: 1rem; color: var(--warm-orange);">
+                        <span class="english-text">Generating recipe for ${people} people...</span>
+                        <span class="chinese-text">正在为${people}人生成食谱...</span>
+                    </p>
                 </div>
             `;
             
-            // 模拟AI处理时间
+            // 模拟AI处理
             setTimeout(() => {
-                // 根据食材和类型选择食谱
-                let recipeList = recipes[mealType] || recipes["家常菜"];
-                let recipe = recipeList[0];
+                // 选择随机食谱
+                const recipe = ingredientData.recipes[0];
+                const scale = people / recipe.baseForPeople;
                 
-                // 如果有食材对应食谱，使用对应食谱
-                if (ingredientRecipes[ingredient]) {
-                    const recipeInfo = ingredientRecipes[ingredient];
-                    if (recipes[recipeInfo.type] && recipes[recipeInfo.type][recipeInfo.index]) {
-                        recipe = recipes[recipeInfo.type][recipeInfo.index];
-                    }
-                }
-                
-                // 根据人数计算食材
-                const scaledIngredients = recipe.ingredients.map(ing => ({
-                    ...ing,
-                    totalAmount: Math.round(ing.amount * people * 10) / 10
-                }));
-                
-                // 计算浪费减少量
-                const wasteReduction = people * 50; // 每人减少50克浪费
+                // 更新环保影响
+                updateEnvironmentalImpact(people, ingredient);
                 
                 resultDiv.innerHTML = `
                     <div>
-                        <h3 style="color: var(--warm-orange);">${recipe.name} (${people}人份)</h3>
+                        <h3>${recipe.name}<span class="chinese-text">· ${recipe.chineseName}</span></h3>
+                        <p>
+                            <span class="english-text">Perfect for ${people} ${people === 1 ? 'person' : 'people'}</span>
+                            <span class="chinese-text">· 适合${people}人</span>
+                        </p>
                         
-                        <h4 style="margin-top: 1.5rem; color: var(--warm-brown);">📊 精准食材清单</h4>
+                        <h4 style="margin-top: 1.5rem; color: var(--primary);">
+                            <span class="english-text">Ingredients</span>
+                            <span class="chinese-text">· 食材清单</span>
+                        </h4>
                         <div class="result-card">
-                            ${scaledIngredients.map(ing => `
-                                <div class="ingredient-item">
-                                    <span class="ingredient-name">${ing.name}</span>
-                                    <span class="ingredient-amount">${ing.totalAmount} ${ing.unit}</span>
-                                </div>
+                            ${recipe.ingredients.map(item => {
+                                const scaledAmount = Math.round(item.amount * scale);
+                                return `
+                                    <div class="ingredient-item">
+                                        <span>${item.name}<span class="chinese-text">· ${item.chineseName}</span></span>
+                                        <span style="font-weight: bold; color: var(--fresh-green);">
+                                            ${scaledAmount} ${item.unit}
+                                        </span>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                        
+                        <h4 style="margin-top: 1.5rem; color: var(--primary);">
+                            <span class="english-text">Instructions</span>
+                            <span class="chinese-text">· 制作步骤</span>
+                        </h4>
+                        <ol style="margin: 1rem 0 1rem 1.5rem;">
+                            ${recipe.steps.map((step, index) => `
+                                <li style="margin-bottom: 0.75rem;">
+                                    ${step}<br>
+                                    <span class="chinese-text" style="display: block; margin-top: 2px;">${recipe.chineseSteps[index]}</span>
+                                </li>
                             `).join('')}
-                        </div>
-                        
-                        <h4 style="margin-top: 1.5rem; color: var(--warm-brown);">👩‍🍳 制作步骤</h4>
-                        <div class="result-card">
-                            <ol style="margin-left: 1.5rem;">
-                                ${recipe.steps.map(step => `<li style="margin-bottom: 0.5rem;">${step}</li>`).join('')}
-                            </ol>
-                            ${recipe.tips ? `<p style="margin-top: 1rem; padding: 0.5rem; background: var(--soft-yellow); border-radius: 8px;"><strong>💡 小贴士:</strong> ${recipe.tips}</p>` : ''}
-                        </div>
-                        
-                        <h4 style="margin-top: 1.5rem; color: var(--warm-brown);">🌍 环保贡献</h4>
-                        <div class="result-card" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9);">
-                            <p>此精确份量食谱可减少约 <strong>${wasteReduction}克</strong> 食物浪费</p>
-                            <p>相当于节约 <strong>${wasteReduction * 5}升</strong> 水资源</p>
-                            <p>减少 <strong>${(wasteReduction * 0.5).toFixed(1)}克</strong> 碳排放</p>
-                            <p style="margin-top: 0.5rem; font-size: 0.9em; color: #666;">感谢您为地球可持续发展做出的贡献！</p>
-                        </div>
+                        </ol>
                     </div>
                 `;
             }, 1000);
         }
         
-        // 计算环保影响
-        function calculateImpact() {
-            const weeklyWaste = parseInt(wasteSlider.value);
-            const yearlyFood = (weeklyWaste * 52 / 1000).toFixed(1);
-            const yearlyWater = weeklyWaste * 5 * 52;
-            const yearlyCO2 = (weeklyWaste * 0.5 * 52 / 1000).toFixed(1);
-            const yearlyMoney = (weeklyWaste * 0.02 * 52).toFixed(0);
-            
-            document.getElementById('savedFood').textContent = yearlyFood;
-            document.getElementById('savedWater').textContent = yearlyWater;
-            document.getElementById('savedCO2').textContent = yearlyCO2;
-            document.getElementById('savedMoney').textContent = yearlyMoney;
-        }
-        
         // 页面加载时初始化
         window.addEventListener('load', function() {
-            // 初始化环保计算
-            calculateImpact();
+            // 初始环保计算
+            updateEnvironmentalImpact(4, 'tomato');
             
             // 自动生成一个示例食谱
             setTimeout(() => {
@@ -525,6 +775,19 @@
                     generateRecipe();
                 }
             }, 500);
+            
+            // 当人数或食材变化时更新环保影响
+            peopleSlider.addEventListener('input', function() {
+                const people = parseInt(this.value);
+                const ingredient = document.getElementById('ingredientSelect').value;
+                updateEnvironmentalImpact(people, ingredient);
+            });
+            
+            document.getElementById('ingredientSelect').addEventListener('change', function() {
+                const people = parseInt(peopleSlider.value);
+                const ingredient = this.value;
+                updateEnvironmentalImpact(people, ingredient);
+            });
         });
         
         // 平滑滚动
