@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodGuardian AI | 智能防浪费食谱助手</title>
+    <style>
+        /* 温馨食欲配色 */
+        :root {
+            --warm-orange: #FF8C42;
+            --soft-yellow: #FFD166;
+            --fresh-green: #06D6A0;
+            --cream-white: #FFF9F0;
+            --warm-brown: #8B5A2B;
+            --light-orange: #FFB347;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--warm-brown);
+            background: linear-gradient(135deg, #fff9f0 0%, #ffe8d6 100%);
+            min-height: 100vh;
+        }
+        
+        /* 容器 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 导航栏 */
+        header {
+            background: linear-gradient(135deg, var(--warm-orange) 0%, var(--light-orange) 100%);
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(255, 140, 66, 0.2);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(139, 90, 43, 0.3);
+        }
+        
+        /* 英雄区域 */
+        .hero {
+            text-align: center;
+            padding: 4rem 0 3rem;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--warm-orange);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            color: var(--warm-brown);
+        }
+        
+        /* 按钮 */
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--fresh-green) 0%, #06C290 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(6, 214, 160, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(6, 214, 160, 0.4);
+        }
+        
+        /* 卡片 */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(255, 140, 66, 0.1);
+            border: 1px solid rgba(255, 140, 66, 0.1);
+            margin: 2rem 0;
+        }
+        
+        /* 表单元素 */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--warm-brown);
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--soft-yellow);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: white;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--fresh-green);
+            box-shadow: 0 0 0 3px rgba(6, 214, 160, 0.1);
+        }
+        
+        /* 滑动条 */
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 10px;
+            border-radius: 5px;
+            background: linear-gradient(to right, var(--soft-yellow), var(--warm-orange));
+            outline: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: var(--fresh-green);
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .slider-value {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--warm-orange);
+            margin-top: 0.5rem;
+        }
+        
+        /* 结果展示 */
+        .result-card {
+            background: linear-gradient(135deg, #fff9f0 0%, #fff0e0 100%);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            border-left: 5px solid var(--fresh-green);
+        }
+        
+        .ingredient-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed rgba(139, 90, 43, 0.1);
+        }
+        
+        .ingredient-name {
+            font-weight: 500;
+        }
+        
+        .ingredient-amount {
+            font-weight: bold;
+            color: var(--fresh-green);
+        }
+        
+        /* 队伍名 */
+        .team-name {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--warm-orange);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(255, 140, 66, 0.3);
+            z-index: 100;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .container { padding: 0 15px; }
+        }
+        
+        /* 加载动画 */
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 140, 66, 0.2);
+            border-top: 4px solid var(--warm-orange);
+            border-radius: 50%;
+            margin: 0 auto;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <nav class="container">
+            <div class="logo">🍎 FoodGuardian AI</div>
+        </nav>
+    </header>
+
+    <!-- 英雄区域 -->
+    <section class="hero">
+        <div class="container">
+            <h1>你今天打算做什么美食？</h1>
+            <p>通过AI智能计算，为家人朋友准备刚好够吃的分量，美味不浪费</p>
+            <a href="#generator" class="btn">开始智能规划</a>
+        </div>
+    </section>
+
+    <!-- 智能生成器 -->
+    <section id="generator" class="container">
+        <div class="card">
+            <h2 style="color: var(--warm-orange); margin-bottom: 1.5rem;">🍽️ 智能食谱生成器</h2>
+            
+            <!-- 用餐人数 -->
+            <div class="form-group">
+                <label>用餐人数</label>
+                <input type="range" min="1" max="20" value="4" class="slider" id="peopleSlider">
+                <div class="slider-value" id="peopleValue">4 人</div>
+            </div>
+            
+            <!-- 用餐类型 -->
+            <div class="form-group">
+                <label>用餐类型</label>
+                <select id="mealType">
+                    <option value="家常菜">家常菜</option>
+                    <option value="健康餐">健康减脂餐</option>
+                    <option value="素食">素食</option>
+                    <option value="宴客菜">宴客菜</option>
+                </select>
+            </div>
+            
+            <!-- 主要食材 -->
+            <div class="form-group">
+                <label>主要食材</label>
+                <select id="ingredientSelect">
+                    <option value="tomato">番茄</option>
+                    <option value="chicken">鸡肉</option>
+                    <option value="potato">土豆</option>
+                    <option value="egg">鸡蛋</option>
+                    <option value="beef">牛肉</option>
+                    <option value="fish">鱼</option>
+                </select>
+            </div>
+            
+            <!-- 生成按钮 -->
+            <button onclick="generateRecipe()" class="btn" style="width: 100%; margin-top: 1.5rem;">
+                🪄 生成智能食谱
+            </button>
+            
+            <!-- 结果区域 -->
+            <div id="recipeResult" style="margin-top: 2rem;">
+                <p style="text-align: center; color: #888;">填写以上信息，点击生成获得个性化食谱</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 环保影响 -->
+    <section id="impact" class="container">
+        <div class="card">
+            <h2 style="color: var(--fresh-green); margin-bottom: 1.5rem;">🌱 环保影响计算器</h2>
+            
+            <div style="display: flex; flex-wrap: wrap; gap: 2rem;">
+                <div style="flex: 1; min-width: 300px;">
+                    <h3>您每周减少的浪费</h3>
+                    <input type="range" min="0" max="1000" value="300" class="slider" id="wasteSlider">
+                    <div class="slider-value" id="wasteValue">300 克</div>
+                </div>
+                
+                <div style="flex: 1; min-width: 300px;">
+                    <h3>计算结果</h3>
+                    <div class="result-card">
+                        <p>每年节省食物: <span id="savedFood">15.6</span> 公斤</p>
+                        <p>节约水资源: <span id="savedWater">7800</span> 升</p>
+                        <p>减少碳排放: <span id="savedCO2">78</span> 公斤</p>
+                        <p>节省资金: <span id="savedMoney">312</span> 元</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 队伍名 -->
+    <div class="team-name">CMMMMC</div>
+
+    <script>
+        // 更新人数显示
+        const peopleSlider = document.getElementById('peopleSlider');
+        const peopleValue = document.getElementById('peopleValue');
+        const wasteSlider = document.getElementById('wasteSlider');
+        const wasteValue = document.getElementById('wasteValue');
+        
+        peopleSlider.addEventListener('input', function() {
+            const people = this.value;
+            peopleValue.textContent = `${people} 人`;
+        });
+        
+        wasteSlider.addEventListener('input', function() {
+            const waste = this.value;
+            wasteValue.textContent = `${waste} 克`;
+            calculateImpact();
+        });
+        
+        // 食谱数据库
+        const recipes = {
+            "家常菜": [
+                {
+                    name: "番茄炒蛋",
+                    ingredients: [
+                        { name: "番茄", amount: 200, unit: "克" },
+                        { name: "鸡蛋", amount: 1, unit: "个" },
+                        { name: "食用油", amount: 10, unit: "毫升" },
+                        { name: "盐", amount: 2, unit: "克" },
+                        { name: "糖", amount: 3, unit: "克" },
+                        { name: "葱花", amount: 5, unit: "克" }
+                    ],
+                    steps: [
+                        "番茄洗净切块，鸡蛋打散备用",
+                        "热锅倒油，先炒鸡蛋至凝固，盛出备用",
+                        "锅中再加少许油，放入番茄块翻炒至出汁",
+                        "加入炒好的鸡蛋，加盐和糖调味，翻炒均匀",
+                        "撒上葱花，出锅装盘"
+                    ],
+                    tips: "番茄选熟透的口感更好，可加少许糖中和酸味"
+                }
+            ],
+            "健康餐": [
+                {
+                    name: "香煎鸡胸沙拉",
+                    ingredients: [
+                        { name: "鸡胸肉", amount: 150, unit: "克" },
+                        { name: "生菜", amount: 100, unit: "克" },
+                        { name: "小番茄", amount: 5, unit: "个" },
+                        { name: "黄瓜", amount: 0.5, unit: "根" },
+                        { name: "橄榄油", amount: 5, unit: "毫升" },
+                        { name: "柠檬汁", amount: 10, unit: "毫升" }
+                    ],
+                    steps: [
+                        "鸡胸肉用盐和黑胡椒腌制10分钟",
+                        "平底锅少油，中火煎鸡胸肉每面4-5分钟至熟透",
+                        "蔬菜洗净切好，放入大碗中",
+                        "鸡胸肉切片放在蔬菜上",
+                        "淋上橄榄油和柠檬汁混合的酱汁"
+                    ],
+                    tips: "鸡胸肉用刀背拍松更易入味，煎后静置5分钟再切"
+                }
+            ],
+            "素食": [
+                {
+                    name: "素食炒饭",
+                    ingredients: [
+                        { name: "米饭", amount: 150, unit: "克" },
+                        { name: "胡萝卜", amount: 50, unit: "克" },
+                        { name: "青豆", amount: 50, unit: "克" },
+                        { name: "玉米", amount: 50, unit: "克" },
+                        { name: "植物油", amount: 10, unit: "毫升" },
+                        { name: "酱油", amount: 5, unit: "毫升" }
+                    ],
+                    steps: [
+                        "胡萝卜切丁，与青豆、玉米一起焯水",
+                        "热锅倒油，加入所有蔬菜翻炒",
+                        "加入米饭翻炒均匀",
+                        "加入酱油调味，翻炒均匀即可"
+                    ],
+                    tips: "使用隔夜饭口感更佳"
+                }
+            ],
+            "宴客菜": [
+                {
+                    name: "红烧牛肉",
+                    ingredients: [
+                        { name: "牛肉", amount: 200, unit: "克" },
+                        { name: "土豆", amount: 100, unit: "克" },
+                        { name: "胡萝卜", amount: 50, unit: "克" },
+                        { name: "洋葱", amount: 50, unit: "克" },
+                        { name: "酱油", amount: 15, unit: "毫升" },
+                        { name: "料酒", amount: 10, unit: "毫升" }
+                    ],
+                    steps: [
+                        "牛肉切块焯水，土豆、胡萝卜切块",
+                        "热锅倒油，炒香洋葱",
+                        "加入牛肉翻炒，加入酱油、料酒",
+                        "加水没过牛肉，炖煮30分钟",
+                        "加入土豆、胡萝卜，再炖20分钟"
+                    ],
+                    tips: "炖煮时间足够，牛肉更软烂入味"
+                }
+            ]
+        };
+        
+        // 食材对应食谱
+        const ingredientRecipes = {
+            "tomato": { type: "家常菜", index: 0 },
+            "chicken": { type: "健康餐", index: 0 },
+            "potato": { type: "宴客菜", index: 0 },
+            "egg": { type: "家常菜", index: 0 },
+            "beef": { type: "宴客菜", index: 0 },
+            "fish": { type: "健康餐", index: 0 }
+        };
+        
+        // 生成食谱函数
+        function generateRecipe() {
+            const people = parseInt(peopleSlider.value);
+            const mealType = document.getElementById('mealType').value;
+            const ingredient = document.getElementById('ingredientSelect').value;
+            
+            const resultDiv = document.getElementById('recipeResult');
+            
+            // 显示加载动画
+            resultDiv.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 1rem; color: var(--warm-orange);">AI正在为您规划${people}人份的完美食谱...</p>
+                </div>
+            `;
+            
+            // 模拟AI处理时间
+            setTimeout(() => {
+                // 根据食材和类型选择食谱
+                let recipeList = recipes[mealType] || recipes["家常菜"];
+                let recipe = recipeList[0];
+                
+                // 如果有食材对应食谱，使用对应食谱
+                if (ingredientRecipes[ingredient]) {
+                    const recipeInfo = ingredientRecipes[ingredient];
+                    if (recipes[recipeInfo.type] && recipes[recipeInfo.type][recipeInfo.index]) {
+                        recipe = recipes[recipeInfo.type][recipeInfo.index];
+                    }
+                }
+                
+                // 根据人数计算食材
+                const scaledIngredients = recipe.ingredients.map(ing => ({
+                    ...ing,
+                    totalAmount: Math.round(ing.amount * people * 10) / 10
+                }));
+                
+                // 计算浪费减少量
+                const wasteReduction = people * 50; // 每人减少50克浪费
+                
+                resultDiv.innerHTML = `
+                    <div>
+                        <h3 style="color: var(--warm-orange);">${recipe.name} (${people}人份)</h3>
+                        
+                        <h4 style="margin-top: 1.5rem; color: var(--warm-brown);">📊 精准食材清单</h4>
+                        <div class="result-card">
+                            ${scaledIngredients.map(ing => `
+                                <div class="ingredient-item">
+                                    <span class="ingredient-name">${ing.name}</span>
+                                    <span class="ingredient-amount">${ing.totalAmount} ${ing.unit}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <h4 style="margin-top: 1.5rem; color: var(--warm-brown);">👩‍🍳 制作步骤</h4>
+                        <div class="result-card">
+                            <ol style="margin-left: 1.5rem;">
+                                ${recipe.steps.map(step => `<li style="margin-bottom: 0.5rem;">${step}</li>`).join('')}
+                            </ol>
+                            ${recipe.tips ? `<p style="margin-top: 1rem; padding: 0.5rem; background: var(--soft-yellow); border-radius: 8px;"><strong>💡 小贴士:</strong> ${recipe.tips}</p>` : ''}
+                        </div>
+                        
+                        <h4 style="margin-top: 1.5rem; color: var(--warm-brown);">🌍 环保贡献</h4>
+                        <div class="result-card" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9);">
+                            <p>此精确份量食谱可减少约 <strong>${wasteReduction}克</strong> 食物浪费</p>
+                            <p>相当于节约 <strong>${wasteReduction * 5}升</strong> 水资源</p>
+                            <p>减少 <strong>${(wasteReduction * 0.5).toFixed(1)}克</strong> 碳排放</p>
+                            <p style="margin-top: 0.5rem; font-size: 0.9em; color: #666;">感谢您为地球可持续发展做出的贡献！</p>
+                        </div>
+                    </div>
+                `;
+            }, 1000);
+        }
+        
+        // 计算环保影响
+        function calculateImpact() {
+            const weeklyWaste = parseInt(wasteSlider.value);
+            const yearlyFood = (weeklyWaste * 52 / 1000).toFixed(1);
+            const yearlyWater = weeklyWaste * 5 * 52;
+            const yearlyCO2 = (weeklyWaste * 0.5 * 52 / 1000).toFixed(1);
+            const yearlyMoney = (weeklyWaste * 0.02 * 52).toFixed(0);
+            
+            document.getElementById('savedFood').textContent = yearlyFood;
+            document.getElementById('savedWater').textContent = yearlyWater;
+            document.getElementById('savedCO2').textContent = yearlyCO2;
+            document.getElementById('savedMoney').textContent = yearlyMoney;
+        }
+        
+        // 页面加载时初始化
+        window.addEventListener('load', function() {
+            // 初始化环保计算
+            calculateImpact();
+            
+            // 自动生成一个示例食谱
+            setTimeout(() => {
+                if (window.location.hash === '#generator' || window.location.hash === '') {
+                    generateRecipe();
+                }
+            }, 500);
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
